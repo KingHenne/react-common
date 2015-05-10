@@ -1,0 +1,36 @@
+{
+  "name": "react-common",
+  "version": "1.0.0",
+  "description": "Common components and utilities for React.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.sinnerschrader.com/henlie/react-common"
+  },
+  "keywords": [
+    "react",
+    "ume"
+  ],
+  "author": "Hendrik Liebau <hendrik.liebau@sinnerschrader.com>",
+  "license": "All rights reserved.",
+  "dependencies": {
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "babelify": "^6.0.2",
+    "browserify": "^10.1.3"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "stage": 0
+        }
+      ]
+    ]
+  }
+}
