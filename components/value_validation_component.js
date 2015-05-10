@@ -6,7 +6,7 @@ import React from 'react';
 export default class ValueValidationComponent extends React.Component {
   state = {
     value: this.props.value,
-    valid: this.isValid(this.props.value)
+    valid: this.props.value ? this.isValid(this.props.value) : undefined
   }
 
   componentDidMount() {
@@ -20,7 +20,7 @@ export default class ValueValidationComponent extends React.Component {
     if (nextProps.shouldValidate && !this.props.shouldValidate) {
       this.validate(true);
     }
-    if (nextProps.value != this.state.value) {
+    if ('value' in nextProps && nextProps.value != this.state.value) {
       this.setState({ value: nextProps.value }, () => {
         this.validate();
       });
