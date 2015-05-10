@@ -38,6 +38,10 @@ export default class ValueValidationComponent extends React.Component {
     }
   }
 
+  handleBlur() {
+    if (this.state.value) this.validate(true);
+  }
+
   validate(alwaysChangeValidState = false) {
     var valid = this.isValid(this.state.value);
     var fromPendingToValid = this.state.valid == undefined && valid;
