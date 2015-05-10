@@ -5,8 +5,8 @@ import React from 'react';
 // https://babeljs.io/docs/usage/caveats/#classes-10-and-below-
 export default class ValueValidationComponent extends React.Component {
   state = {
-    value: undefined,
-    valid: undefined
+    value: this.props.value,
+    valid: this.isValid(this.props.value)
   }
 
   componentDidMount() {
@@ -20,6 +20,11 @@ export default class ValueValidationComponent extends React.Component {
     if (nextProps.shouldValidate && !this.props.shouldValidate) {
       this.validate(true);
     }
+    if (nextProps.value != this.state.value) {
+      this.setState({ value: nextProps.value }, () => {
+        this.validate();
+      });
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -32,10 +37,12 @@ export default class ValueValidationComponent extends React.Component {
 
   handleChange(e) {
     var value = e.target.value;
-    this.setState({value}, () => this.validate());
-    if (this.props.onChange) {
-      this.props.onChange(value);
-    }
+    this.setState({value}, () => {
+      this.validate();
+      if (this.props.onChange) {
+        this.props.onChange(value);
+      }
+    });
   }
 
   handleBlur() {
