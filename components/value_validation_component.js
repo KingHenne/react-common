@@ -1,9 +1,12 @@
 import React from 'react';
+import validate from '../utils/validate';
 
 // ValueValidationComponent is in abstract component.
-// Do not define static props here, see:
-// https://babeljs.io/docs/usage/caveats/#classes-10-and-below-
+// The static props of this class will not be inherited on IE <= 10,
+// see: https://babeljs.io/docs/usage/caveats/#classes-10-and-below-
 export default class ValueValidationComponent extends React.Component {
+  static validationProps = [ 'required', 'pattern', 'type' ]
+
   state = {
     value: this.props.value,
     valid: this.props.value ? this.isValid(this.props.value) : undefined
@@ -63,9 +66,16 @@ export default class ValueValidationComponent extends React.Component {
   }
 
   isValid(value) {
-    if (this.props.required && !value) {
-      return false;
-    }
-    return true;
+    // Non-required fields with falsy values are valid,
+    // regardless of their other validation props:
+    if (!this.props.required && !value) return true;
+
+    // Otherwise every validation prop must be evaluated.
+    return ValueValidationComponent.validationProps.every(function(prop) {
+      if (prop in this.props) {
+        return validate(prop, this.props[prop], value);
+      }
+      return true;
+    }, this);
   }
 }

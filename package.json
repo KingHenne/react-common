@@ -1,6 +1,6 @@
 {
   "name": "react-common",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Common components and utilities for React.js",
   "main": "index.js",
   "scripts": {
