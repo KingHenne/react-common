@@ -1,7 +1,7 @@
 import React from 'react';
 import validate from '../utils/validate';
 
-// ValueValidationComponent is in abstract component.
+// ValueValidationComponent is an abstract component.
 // The static props of this class will not be inherited on IE <= 10,
 // see: https://babeljs.io/docs/usage/caveats/#classes-10-and-below-
 export default class ValueValidationComponent extends React.Component {
