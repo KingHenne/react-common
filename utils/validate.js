@@ -1,4 +1,5 @@
-var canWarn = console && console.warn;
+if (!console) console = {};
+if (!console.warn) console.warn = function(){};
 
 var typePatterns = {
   // E-mail and phone patterns taken from:
@@ -15,7 +16,7 @@ export default function validate(prop, expectation, value) {
 
     case 'pattern':
       if (!(expectation instanceof RegExp)) {
-        expectation = RegExp(expectation)
+        expectation = RegExp(expectation);
       }
       return expectation.test(value);
       break;
@@ -27,17 +28,13 @@ export default function validate(prop, expectation, value) {
           return validate('pattern', typePatterns[expectation], value);
           break;
         default:
-          if (canWarn) {
-            console.warn(`Validation for 'type="${expectation}"' is not implemented.`);
-          }
+          console.warn(`Validation for 'type="${expectation}"' is not implemented.`);
           return true;
       }
       break;
 
     default:
-      if (canWarn) {
-        console.warn(`Validation '${prop}' is not implemented.`);
-      }
+      console.warn(`Validation '${prop}' is not implemented.`);
       return true;
   }
 }
