@@ -23,7 +23,7 @@ export default class ValueValidationComponent extends React.Component {
     if (nextProps.shouldValidate && !this.props.shouldValidate) {
       this.validate(true);
     }
-    if ('value' in nextProps && nextProps.value != this.state.value) {
+    if (nextProps.value != this.props.value && nextProps.value != this.state.value) {
       this.setState({ value: nextProps.value }, () => {
         this.validate();
       });
