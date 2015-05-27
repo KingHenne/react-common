@@ -11,7 +11,7 @@ var typePatterns = {
 export default function validate(prop, expectation, value) {
   switch (prop) {
     case 'required':
-      return !expectation || typeof value == 'string' && !!value.trim();
+      return !expectation || value === true || typeof value == 'string' && !!value.trim();
       break;
 
     case 'pattern':
