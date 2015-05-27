@@ -38,8 +38,13 @@ export default class ValueValidationComponent extends React.Component {
     return true;
   }
 
+  // Can be override when other properties of target shall be used as value.
+  getValueFromTarget(target) {
+    return target.value;
+  }
+
   handleChange(e) {
-    var value = e.target.value;
+    var value = this.getValueFromTarget(e.target);
     this.setState({value}, () => {
       this.validate();
       if (this.props.onChange) {
