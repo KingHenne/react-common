@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.sinnerschrader.com/henlie/react-common"
+    "url": "http://github.com/KingHenne/react-common.git"
   },
   "keywords": [
     "react",
     "ume"
   ],
-  "author": "Hendrik Liebau <hendrik.liebau@sinnerschrader.com>",
-  "license": "All rights reserved.",
+  "author": "Hendrik Liebau <mail@hendrik-liebau.de>",
+  "license": "MIT",
   "dependencies": {
     "react": "^0.13.3"
   },
