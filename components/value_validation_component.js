@@ -5,7 +5,7 @@ import validate from '../utils/validate';
 // The static props of this class will not be inherited on IE <= 10,
 // see: https://babeljs.io/docs/usage/caveats/#classes-10-and-below-
 export default class ValueValidationComponent extends React.Component {
-  static validationProps = [ 'required', 'pattern', 'type' ]
+  static validationProps = [ 'required', 'pattern', 'type', 'minAge', 'maxAge' ]
 
   state = {
     value: this.props.value,

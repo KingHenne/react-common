@@ -8,10 +8,30 @@ var typePatterns = {
   phone: /^([\+][0-9]{1,3}([ \.\-])?)?([\(][0-9]{1,6}[\)])?([0-9 \.\-]{1,32})(([A-Za-z \:]{1,11})?[0-9]{1,4}?)$/
 };
 
+function isValidDate(date) {
+  return date instanceof Date && !isNaN(date.getTime());
+}
+
+// Taken from: http://stackoverflow.com/a/4076440
+function calculateAge(birthDate, otherDate) {
+  birthDate = new Date(birthDate);
+  otherDate = new Date(otherDate);
+
+  var years = (otherDate.getFullYear() - birthDate.getFullYear());
+
+  if (otherDate.getMonth() < birthDate.getMonth() || 
+      otherDate.getMonth() == birthDate.getMonth() && otherDate.getDate() < birthDate.getDate()) {
+      years--;
+  }
+
+  return years;
+}
+
 export default function validate(prop, expectation, value) {
   switch (prop) {
     case 'required':
-      return !expectation || value === true || typeof value == 'string' && !!value.trim();
+      if (typeof value == 'string') value = value.trim();
+      return !expectation || value;
       break;
 
     case 'pattern':
@@ -27,10 +47,22 @@ export default function validate(prop, expectation, value) {
         case 'phone':
           return validate('pattern', typePatterns[expectation], value);
           break;
+        case 'date':
+          return isValidDate(value);
         default:
           console.warn(`Validation for 'type="${expectation}"' is not implemented.`);
           return true;
       }
+      break;
+
+    case 'minAge':
+      if (!isValidDate(value)) return false;
+      return calculateAge(value, new Date()) >= parseInt(expectation, 10);
+      break;
+
+    case 'maxAge':
+      if (!isValidDate(value)) return false;
+      return calculateAge(value, new Date()) <= parseInt(expectation, 10);
       break;
 
     default:
