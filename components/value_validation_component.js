@@ -70,7 +70,12 @@ export default class ValueValidationComponent extends React.Component {
     return valid;
   }
 
+  // Returns true (valid), false (invalid), undefined (pending)
+  // or null (no validatation needed).
   isValid(value) {
+    // Disabled fields shall not be validated.
+    if (this.props.disabled) return null;
+
     // Non-required fields with falsy values are valid,
     // regardless of their other validation props:
     if (!this.props.required && !value) return true;
