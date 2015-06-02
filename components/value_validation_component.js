@@ -16,19 +16,19 @@ export default class ValueValidationComponent extends React.Component {
   componentDidMount() {
     if (this.props.onValidation) {
       // Send the initial valid state to the parent component.
-      this.props.onValidation(this.props.name, this.state.valid);
+      this.props.onValidation(this.props.name, this.state.valid, this.props.disabled);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.value != this.props.value && nextProps.value != this.state.value) {
       this.setState({ value: nextProps.value }, () => {
-        this.validate(nextProps);
+        this.validate();
       });
     } else if (nextProps.shouldValidate && !this.props.shouldValidate) {
-      this.validate(nextProps, true);
-    } else if (nextProps.disabled != this.props.disabled) {
-      this.validate(nextProps);
+      this.validate(true);
+    } else if (nextProps.disabled != this.props.disabled && nextProps.onValidation) {
+      nextProps.onValidation(nextProps.name, this.state.valid, nextProps.disabled);
     }
   }
 
@@ -56,36 +56,32 @@ export default class ValueValidationComponent extends React.Component {
   }
 
   handleBlur() {
-    if (this.state.value) this.validate(this.props, true);
+    if (this.state.value) this.validate(true);
   }
 
-  validate(props = this.props, alwaysChangeValidState = false) {
-    var valid = this.isValid(this.state.value, props);
-    var fromPendingToValid = this.state.valid === validationStates.PENDING && valid;
-    var validChanged = this.state.valid !== validationStates.PENDING && this.state.valid !== valid;
+  validate(alwaysChangeValidState = false) {
+    var valid = this.isValid(this.state.value);
+    var fromPendingToValid = this.state.valid == validationStates.PENDING && valid;
+    var validChanged = this.state.valid != validationStates.PENDING && this.state.valid != valid;
     if (fromPendingToValid || validChanged || alwaysChangeValidState) {
       this.setState({valid});
-      if (props.onValidation) {
-        props.onValidation(props.name, valid);
+      if (this.props.onValidation) {
+        this.props.onValidation(this.props.name, valid, this.props.disabled);
       }
     }
     return valid;
   }
 
-  // Returns true (valid), false (invalid), undefined (pending)
-  // or null (no validatation needed).
-  isValid(value, props = this.props) {
-    // Disabled fields shall not be validated.
-    if (props.disabled) return validationStates.NO_VALIDATION_NEEDED;
-
+  // Returns true (valid), false (invalid) or undefined (pending).
+  isValid(value) {
     // Non-required fields with falsy values are valid,
     // regardless of their other validation props:
-    if (!props.required && !value) return validationStates.VALID;
+    if (!this.props.required && !value) return validationStates.VALID;
 
     // Otherwise every validation prop must be evaluated.
     return ValueValidationComponent.validationProps.every(function(prop) {
-      if (prop in props) {
-        return validate(prop, props[prop], value);
+      if (prop in this.props) {
+        return validate(prop, this.props[prop], value);
       }
       return validationStates.VALID;
     }, this);
